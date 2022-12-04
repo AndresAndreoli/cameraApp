@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "488520582971",
+    "project_id": "cameraapp-38e09",
+    "storage_bucket": "cameraapp-38e09.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:488520582971:android:c596f7598f89b0e0a5191e",
+        "android_client_info": {
+          "package_name": "com.example.camaraapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "488520582971-icqq1s752n7rd6pmj603qgr7ro6modai.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAQ-ud30uGL2gc0bnYUVV44slzUJdnIKZo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "488520582971-icqq1s752n7rd6pmj603qgr7ro6modai.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
