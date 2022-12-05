@@ -23,13 +23,9 @@ import com.otaliastudios.cameraview.PictureResult
 import java.io.File
 import java.util.*
 
-
-private const val REQUEST_ID_MULTIPLE_PERMISSIONS = 7
-private const val REQUEST_RECORD_AUDIO_PERMISSION = 200
-
 class MainActivity : AppCompatActivity(), FileCallback {
 
-    private lateinit var camera : CameraView
+    private lateinit var camera: CameraView
     private val storage = Firebase.storage
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -42,7 +38,10 @@ class MainActivity : AppCompatActivity(), FileCallback {
 
             camera.addCameraListener(object : CameraListener() {
                 override fun onPictureTaken(result: PictureResult) {
-                      result.toFile(File(getExternalFilesDir("Provisional"), "takenPicture.jpg"), this@MainActivity)
+                    result.toFile(
+                        File(getExternalFilesDir("Provisional"), "takenPicture.jpg"),
+                        this@MainActivity
+                    )
                 }
             })
         } else {
@@ -50,13 +49,29 @@ class MainActivity : AppCompatActivity(), FileCallback {
         }
     }
 
-    fun takePicture(view: View){
+    fun takePicture(view: View) {
         camera.takePicture()
     }
 
+    override fun onPause() {
+        super.onPause()
+        camera.close()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        camera.destroy()
+    }
+
     private fun checkPermission(): Boolean {
-        return ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED &&
-                ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED
+        return ContextCompat.checkSelfPermission(
+            this,
+            Manifest.permission.CAMERA
+        ) == PackageManager.PERMISSION_GRANTED &&
+                ContextCompat.checkSelfPermission(
+                    this,
+                    Manifest.permission.RECORD_AUDIO
+                ) == PackageManager.PERMISSION_GRANTED
     }
 
     private fun requestPermission() {
@@ -73,17 +88,17 @@ class MainActivity : AppCompatActivity(), FileCallback {
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         when (requestCode) {
-            REQUEST_RECORD_AUDIO_PERMISSION -> {
-                grantResults[0] == PackageManager.PERMISSION_GRANTED
-            }
-            PERMISSION_REQUEST_CODE -> if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            PERMISSION_REQUEST_CODE -> if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED
+                && grantResults[1] == PackageManager.PERMISSION_GRANTED
+            ) {
                 Toast.makeText(applicationContext, "Permission Granted", Toast.LENGTH_SHORT).show()
-
                 // main logic
             } else {
                 Toast.makeText(applicationContext, "Permission Denied", Toast.LENGTH_SHORT).show()
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                     if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
+                        != PackageManager.PERMISSION_GRANTED &&
+                        ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO)
                         != PackageManager.PERMISSION_GRANTED
                     ) {
                         showMessageOKCancel(
@@ -110,12 +125,12 @@ class MainActivity : AppCompatActivity(), FileCallback {
 
     override fun onFileReady(file: File?) {
         var file = Uri.fromFile(file)
-        storage.reference.child("images/${file.lastPathSegment+ "_" +Date().time}")
+        storage.reference.child("images/${file.lastPathSegment + "_" + Date().time}")
             .putFile(file)
             .addOnSuccessListener {
                 Log.d("cameraTest", "salio bien")
             }
-            .addOnFailureListener{
+            .addOnFailureListener {
                 Log.d("cameraTest", "salio mal")
             }
     }
